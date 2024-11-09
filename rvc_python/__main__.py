@@ -22,11 +22,11 @@ def main():
     api_parser = subparsers.add_parser("api", help="Start API server")
     api_parser.add_argument("-p", "--port", type=int, default=5050, help="Port number for the API server")
     api_parser.add_argument("-l", "--listen", action="store_true", help="Listen to external connections")
+    api_parser.add_argument("-md", "--models_dir", type=str, default="rvc_models", help="Directory to store models")
     api_parser.add_argument("-pm", "--preload-model", type=str, help="Preload model on startup (optional)")
 
     # Common arguments for both CLI and API
     for subparser in [cli_parser, api_parser]:
-        subparser.add_argument("-md", "--models_dir", type=str, default="rvc_models", help="Directory to store models")
         subparser.add_argument("-ip", "--index", type=str, default="", help="Path to index file (optional)")
         subparser.add_argument("-de", "--device", type=str, default="cpu:0", help="Device to use (e.g., cpu:0, cuda:0)")
         subparser.add_argument("-me", "--method", type=str, default="rmvpe", choices=['harvest', "crepe", "rmvpe", 'pm'], help="Pitch extraction algorithm")
@@ -40,21 +40,25 @@ def main():
 
     args = parser.parse_args()
 
-    # Initialize RVCInference
-    rvc = RVCInference(models_dir=args.models_dir, device=args.device)
-    rvc.set_params(
-        f0method=args.method,
-        f0up_key=args.pitch,
-        index_rate=args.index_rate,
-        filter_radius=args.filter_radius,
-        resample_sr=args.resample_sr,
-        rms_mix_rate=args.rms_mix_rate,
-        protect=args.protect
-    )
-
     # Handle CLI command
     if args.command == "cli":
-        rvc.load_model(args.model)
+        # Initialize RVCInference with model path
+        rvc = RVCInference(
+            device=args.device,
+            model_path=args.model,
+            index_path=args.index,
+            version=args.version
+        )
+        rvc.set_params(
+            f0method=args.method,
+            f0up_key=args.pitch,
+            index_rate=args.index_rate,
+            filter_radius=args.filter_radius,
+            resample_sr=args.resample_sr,
+            rms_mix_rate=args.rms_mix_rate,
+            protect=args.protect
+        )
+
         if args.input:
             # Process single file
             rvc.infer_file(args.input, args.output)
@@ -69,6 +73,21 @@ def main():
 
     # Handle API command
     elif args.command == "api":
+        # Initialize RVCInference without a model (will be loaded on demand)
+        rvc = RVCInference(
+            models_dir=args.models_dir,
+            device=args.device
+        )
+        rvc.set_params(
+            f0method=args.method,
+            f0up_key=args.pitch,
+            index_rate=args.index_rate,
+            filter_radius=args.filter_radius,
+            resample_sr=args.resample_sr,
+            rms_mix_rate=args.rms_mix_rate,
+            protect=args.protect
+        )
+
         # Create and configure FastAPI app
         app = create_app()
         app.state.rvc = rvc
