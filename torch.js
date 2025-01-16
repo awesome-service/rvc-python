@@ -7,7 +7,7 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message:
-          "pip install torch==2.1.1 torchvision torchaudio==2.1.1 {{args && args.xformers ? 'xformers' : ''}}  --index-url https://download.pytorch.org/whl/cu118",
+          "uv pip install torch==2.1.1 torchvision torchaudio==2.1.1 {{args && args.xformers ? 'xformers' : ''}}  --index-url https://download.pytorch.org/whl/cu118",
       },
     },
     // windows amd
@@ -17,7 +17,7 @@ module.exports = {
       params: {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
-        message: "pip install torch-directml",
+        message: "uv pip install torch-directml",
       },
     },
     // windows cpu
@@ -27,7 +27,7 @@ module.exports = {
       params: {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
-        message: "pip install torch torchvision torchaudio",
+        message: "uv pip install torch torchvision torchaudio",
       },
     },
 
@@ -39,7 +39,7 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message:
-          "pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cpu",
+          "uv pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cpu",
       },
     },
     // linux nvidia
@@ -50,7 +50,7 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message:
-          "pip install torch torchvision torchaudio {{args && args.xformers ? 'xformers' : ''}}",
+          "uv pip install torch torchvision torchaudio {{args && args.xformers ? 'xformers' : ''}}",
       },
     },
     // linux rocm (amd)
@@ -61,7 +61,7 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message:
-          "pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7",
+          "uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7",
       },
     },
     // linux cpu
@@ -72,7 +72,7 @@ module.exports = {
         venv: "{{args && args.venv ? args.venv : null}}",
         path: "{{args && args.path ? args.path : '.'}}",
         message:
-          "pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu",
+          "uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu",
       },
     },
   ],

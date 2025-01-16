@@ -20,7 +20,7 @@ module.exports = {
       params: {
         venv: ENV_PATH, // Edit this to customize the venv folder path
         path: APP_NAME,
-        message: ["pip install devicetorch", "pip install -r requirements.txt"],
+        message: ["uv pip install devicetorch", "uv pip install -r requirements.txt"],
       },
     },
     {
